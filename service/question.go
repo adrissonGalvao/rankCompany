@@ -2,32 +2,38 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"rankCompanies/domain"
 	"strconv"
 	"strings"
 )
 
+type IQuestionService interface {
+	GetQuestion(questionsString []string) ([]domain.Question, error)
+	Teste(i string)
+}
 type QuestionService struct {
 }
 
 func (qs *QuestionService) GetQuestion(questionsString []string) ([]domain.Question, error) {
 	var questions []domain.Question
 	for _, questionString := range questionsString {
-		questionString := strings.Split(questionString, " ")
-		id, answer, err := convertQuestionString(questionString)
+		questionSplit := strings.Split(questionString, " ")
+		id, answer, err := convertQuestionString(questionSplit)
 		if err != nil {
 			return nil, err
 		}
-		question := domain.Question{id, make([]int32, answer)}
-
-		questionFound, err := seachQuestion(&question, &questions)
-
-		if err != nil {
-			questions = append(questions, question)
-		} else {
-			questionFound.Answers = append(questionFound.Answers, question.Answers[0])
+		if answer < 5 {
+			var question domain.Question
+			question.Id = id
+			question.Answers = append(question.Answers, answer)
+			index, err := seachQuestion(&question, &questions)
+			if err != nil {
+				questions = append(questions, question)
+			} else {
+				questions[index].Answers = append(questions[index].Answers, answer)
+			}
 		}
-
 	}
 
 	return questions, nil
@@ -45,11 +51,16 @@ func convertQuestionString(questionString []string) (int64, int32, error) {
 	return int64(id), int32(answers), nil
 }
 
-func seachQuestion(question *domain.Question, questions *[]domain.Question) (*domain.Question, error) {
-	for _, x := range *questions {
+func seachQuestion(question *domain.Question, questions *[]domain.Question) (int, error) {
+
+	for i, x := range *questions {
 		if x.Id == question.Id {
-			return &x, nil
+			return i, nil
 		}
 	}
-	return nil, errors.New("Not Found")
+	return 0, errors.New("Not Found")
+}
+
+func (qs *QuestionService) Teste(i string) {
+	fmt.Println(i)
 }
