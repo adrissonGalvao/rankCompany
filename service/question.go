@@ -23,17 +23,17 @@ func (qs *QuestionService) GetQuestion(questionsString []string) ([]domain.Quest
 		if err != nil {
 			return nil, err
 		}
-		if answer < 5 {
-			var question domain.Question
-			question.Id = id
-			question.Answers = append(question.Answers, answer)
-			index, err := seachQuestion(&question, &questions)
-			if err != nil {
-				questions = append(questions, question)
-			} else {
-				questions[index].Answers = append(questions[index].Answers, answer)
-			}
+
+		var question domain.Question
+		question.Id = id
+		question.Answers = append(question.Answers, answer)
+		index, err := seachQuestion(&question, &questions)
+		if err != nil {
+			questions = append(questions, question)
+		} else {
+			questions[index].Answers = append(questions[index].Answers, answer)
 		}
+
 	}
 
 	return questions, nil
@@ -61,6 +61,6 @@ func seachQuestion(question *domain.Question, questions *[]domain.Question) (int
 	return 0, errors.New("Not Found")
 }
 
-func (qs *QuestionService) Teste(i string) {
+func (qs *QuestionService) verifyAnswer(i string) {
 	fmt.Println(i)
 }
