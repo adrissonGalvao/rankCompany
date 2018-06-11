@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"rankCompanies/domain"
 	"rankCompanies/service"
 )
 
 var companyService = service.CompanyService{}
 
 func main() {
+	var companies []domain.Company
 	for _, file := range os.Args[1:] {
 		content, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -19,16 +21,23 @@ func main() {
 
 		conpany, err := companyService.GetFile(content)
 
-		fmt.Println(conpany.Name)
-
-		// for _, v := range conpany.Questions {
-		// 	fmt.Printf("Id:%d and len.Answers: %d\n", v.Id, len(v.Answers))
-		// }
-
-		/*teste*/
-		for _, v := range conpany.Questions {
-			favorable, neutral, unfavorable := service.PercentageCalculation(v.Answers)
-			fmt.Println(v.Id, ":", favorable, "%fav,", neutral, "% neultral,", unfavorable, "% unfav")
+		if err != nil {
+			fmt.Println(err.Error())
 		}
+
+		for i, v := range conpany.Questions {
+			conpany.Questions[i].Favorable, conpany.Questions[i].Neltral, conpany.Questions[i].Unfavorable, conpany.Questions[i].Invalid = service.CountAnswers(v.Answers)
+		}
+		companies = append(companies, conpany)
+
 	}
+
+	fmt.Println("Summary by companies:\n")
+	service.SummaryByCompanies(companies)
+	fmt.Println("Fav answers by questions:\n")
+	service.FavAnswersByQuestions(companies)
+	fmt.Println("Valid answers:\n")
+	service.ValidAnswersByCompany(companies)
+	fmt.Println("Invalid answers:\n")
+	service.InvalidAnswersByCompany(companies)
 }
