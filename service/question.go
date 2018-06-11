@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"rankCompanies/domain"
 	"strconv"
 	"strings"
@@ -10,7 +9,6 @@ import (
 
 type IQuestionService interface {
 	GetQuestion(questionsString []string) ([]domain.Question, error)
-	Teste(i string)
 }
 type QuestionService struct {
 }
@@ -59,8 +57,4 @@ func seachQuestion(question *domain.Question, questions *[]domain.Question) (int
 		}
 	}
 	return 0, errors.New("Not Found")
-}
-
-func (qs *QuestionService) verifyAnswer(i string) {
-	fmt.Println(i)
 }

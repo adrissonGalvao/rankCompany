@@ -13,11 +13,11 @@ func CountAnswers(answers []int32) (int, int, int, int) {
 	unfavorable := 0
 	invalid := 0
 	for _, answer := range answers {
-		if answer < 2 {
+		if answer == 0 || answer == 1 {
 			favorable++
 		} else if answer == 2 {
 			neutral++
-		} else if neutral > 2 && neutral < 5 {
+		} else if answer == 3 || answer == 4 {
 			unfavorable++
 		} else {
 			invalid++
@@ -32,13 +32,13 @@ func SummaryByCompanies(companies []domain.Company) {
 	for _, company := range companies {
 		fmt.Println(company.Name)
 		for _, question := range company.Questions {
-			percente := CalculatePergente(question)
+			percente := CalculatePercente(question)
 			fmt.Printf("%d: %d%% fav, %d%% neutral, %d%% unfav\n", question.Id, percente[0], percente[1], percente[2])
 		}
 	}
 }
 
-func CalculatePergente(question domain.Question) []int {
+func CalculatePercente(question domain.Question) []int {
 	total := float32(question.Favorable + question.Neltral + question.Unfavorable)
 	percFavorable := (float32(question.Favorable) / total) * 100
 	percNeltral := (float32(question.Neltral) / total) * 100
@@ -55,7 +55,7 @@ func FavAnswersByQuestions(companies []domain.Company) {
 	favAnswers := make(map[int64]string)
 	for _, v := range companies {
 		for _, x := range v.Questions {
-			percente := (CalculatePergente(x))[0]
+			percente := (CalculatePercente(x))[0]
 			favAnswers[x.Id] += v.Name + " " + strconv.Itoa(percente) + "% fav"
 		}
 	}
