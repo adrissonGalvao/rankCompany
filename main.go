@@ -21,17 +21,17 @@ func main() {
 			return
 		}
 
-		conpany, err := companyService.GetFile(content)
+		company, err := companyService.GetFile(content)
 
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
-		for i, v := range conpany.Questions {
-			conpany.Questions[i].Favorable, conpany.Questions[i].Neltral, conpany.Questions[i].Unfavorable, conpany.Questions[i].Invalid = service.CountAnswers(v.Answers)
+		for i, v := range company.Questions {
+			company.Questions[i].Favorable, company.Questions[i].Neltral, company.Questions[i].Unfavorable, company.Questions[i].Invalid = service.CountAnswers(v.Answers)
 		}
-		companies = append(companies, conpany)
+		companies = append(companies, company)
 	}
 
 	fmt.Println("Summary by companies:")
