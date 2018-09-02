@@ -2,7 +2,7 @@ package service
 
 import (
 	"errors"
-	"rankCompanies/domain"
+	"rankCompany/domain"
 	"strconv"
 	"strings"
 )
@@ -15,7 +15,9 @@ type QuestionService struct {
 
 func (qs *QuestionService) GetQuestion(questionsString []string) ([]domain.Question, error) {
 	var questions []domain.Question
+
 	for _, questionString := range questionsString {
+
 		questionSplit := strings.Split(questionString, " ")
 		id, answer, err := convertQuestionString(questionSplit)
 		if err != nil {
@@ -25,6 +27,7 @@ func (qs *QuestionService) GetQuestion(questionsString []string) ([]domain.Quest
 		var question domain.Question
 		question.Id = id
 		question.Answers = append(question.Answers, answer)
+
 		index, err := seachQuestion(&question, &questions)
 		if err != nil {
 			questions = append(questions, question)

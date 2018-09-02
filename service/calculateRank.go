@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"rankCompanies/domain"
+	"rankCompany/domain"
 	"strconv"
 )
 
@@ -39,10 +39,20 @@ func SummaryByCompanies(companies []domain.Company) {
 }
 
 func CalculatePercente(question domain.Question) []int {
+
 	total := float32(question.Favorable + question.Neltral + question.Unfavorable)
-	percFavorable := (float32(question.Favorable) / total) * 100
-	percNeltral := (float32(question.Neltral) / total) * 100
-	percUnfavorable := (float32(question.Unfavorable) / total) * 100
+	var percFavorable float32
+	var percNeltral float32
+	var percUnfavorable float32
+	if total != 0 {
+		percFavorable = (float32(question.Favorable) / total) * 100
+		percNeltral = (float32(question.Neltral) / total) * 100
+		percUnfavorable = (float32(question.Unfavorable) / total) * 100
+	} else {
+		percFavorable = 0
+		percNeltral = 0
+		percUnfavorable = 0
+	}
 	percente := make([]int, 3)
 	percente[0] = int(percFavorable)
 	percente[1] = int(percNeltral)
@@ -68,13 +78,13 @@ func FavAnswersByQuestions(companies []domain.Company) {
 func ValidAnswersByCompany(companies []domain.Company) {
 	answersValid := make(map[string]int)
 	for _, company := range companies {
+
 		for _, question := range company.Questions {
 			answersValid[company.Name] += question.Favorable + question.Neltral + question.Unfavorable
 		}
 	}
-
-	for i, v := range answersValid {
-		fmt.Printf("%s: %d \n", i, v)
+	for company, totalValid := range answersValid {
+		fmt.Printf("%s: %d \n", company, totalValid)
 	}
 }
 

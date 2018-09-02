@@ -2,7 +2,7 @@ package test
 
 import (
 	"io/ioutil"
-	"rankCompanies/service"
+	"rankCompany/service"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package test
 
 import (
-	"rankCompanies/domain"
-	"rankCompanies/service"
+	"rankCompany/domain"
+	"rankCompany/service"
 	"strconv"
 	"testing"
 )
